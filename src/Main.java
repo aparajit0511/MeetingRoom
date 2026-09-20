@@ -24,10 +24,22 @@ public class Main {
 
         User user = new User("Aparajit");
 
-        String reservationID = meetingRoom.searchAvailableRoom(LocalTime.of(10,0),LocalTime.of(10,30));
-        meetingRoom.bookReservation(reservationID,LocalTime.of(10,0),LocalTime.of(10,30),user);
+//        String reservationID = meetingRoom.searchAvailableRoom(LocalTime.of(10,0),LocalTime.of(10,30));
+//        meetingRoom.bookReservation(reservationID,LocalTime.of(10,0),LocalTime.of(10,30),user);
+//
+//        meetingRoom.cancelReservation(reservationID);
 
-        meetingRoom.cancelReservation(reservationID);
+        String availabilityID = meetingRoom.searchAvailableRoom(
+                LocalTime.of(10, 0),
+                LocalTime.of(10, 30));
+
+        String bookingID = meetingRoom.bookReservation(
+                availabilityID,
+                LocalTime.of(10, 0),
+                LocalTime.of(10, 30),
+                user);
+
+        meetingRoom.cancelReservation(bookingID);
 
     }
 }

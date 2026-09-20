@@ -60,25 +60,45 @@ public class MeetingRoom {
         return null;
     }
 
-    public void bookReservation(String reservationId,LocalTime startTime,LocalTime endTime,User user){
+    public String bookReservation(String reservationId, LocalTime startTime, LocalTime endTime, User user) {
+
         Reservation newReservation = null;
         Room room = null;
-        String roomId= "";
-        String userId = user.getUserId();
-        for (int i =0 ;i< reservationArrayList.size();i++){
-            if(Objects.equals(reservationArrayList.get(i).getReservationId(), reservationId)){
-                 room = reservationArrayList.get(i).room;
-                 roomId = reservationArrayList.get(i).room.getRoomId();
-                newReservation = new Reservation(room, user, startTime,endTime);
+
+        for (int i = 0; i < reservationArrayList.size(); i++) {
+
+            if (Objects.equals(
+                    reservationArrayList.get(i).getReservationId(),
+                    reservationId)) {
+
+                room = reservationArrayList.get(i).getRoom();
+
+                newReservation =
+                        new Reservation(room, user, startTime, endTime);
+
+                break;
             }
         }
+
+        if (room == null || newReservation == null) {
+            return null;
+        }
+
         reservationArrayList.add(newReservation);
 
-        assert room != null;
-        roomReservation.computeIfAbsent(room.getRoomName(), k-> new ArrayList<>()).add(newReservation);
-        userReservation.computeIfAbsent(user.getUserName(),k-> new ArrayList<>()).add(newReservation);
+        roomReservation
+                .computeIfAbsent(
+                        room.getRoomName(),
+                        k -> new ArrayList<>())
+                .add(newReservation);
 
+        userReservation
+                .computeIfAbsent(
+                        user.getUserName(),
+                        k -> new ArrayList<>())
+                .add(newReservation);
 
+        return newReservation.getReservationId();
     }
 
     public void cancelReservation(String reservationId){
