@@ -3,6 +3,7 @@ package meetingroomreservation;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MeetingRoom {
 
@@ -36,16 +37,45 @@ public class MeetingRoom {
         return null;
     }
 
-    public void bookReservation(String reservationId,LocalTime startTime,LocalTime endTime){
+    public void bookReservation(String reservationId,LocalTime startTime,LocalTime endTime,User user){
+        Reservation newReservation = null;
+        Room room = null;
+        String roomId= "";
+        String userId = user.getUserId();
+        for (int i =0 ;i< reservationArrayList.size();i++){
+            if(Objects.equals(reservationArrayList.get(i).getReservationId(), reservationId)){
+                 room = reservationArrayList.get(i).room;
+                 roomId = reservationArrayList.get(i).room.getRoomId();
+                newReservation = new Reservation(room, user, startTime,endTime);
+            }
+        }
+        reservationArrayList.add(newReservation);
+        roomReservation.put(roomId,new ArrayList<>());
+        roomReservation.get(roomId).add(newReservation);
 
+        userReservation.put(userId,new ArrayList<>());
+        userReservation.get(userId).add(newReservation);
 
     }
 
     public void cancelReservation(String reservationId){
+        for (int i =0 ;i< reservationArrayList.size();i++){
+            if(Objects.equals(reservationArrayList.get(i).getReservationId(), reservationId)){
+//                room = reservationArrayList.get(i).room;
+//                roomId = reservationArrayList.get(i).room.getRoomId();
+//                newReservation = new Reservation(room, user, startTime,endTime);
+
+            }
+        }
 
     }
 
-    public void viewReservation(String userId){
+    public void viewReservationByRoom(String roomName){
+
+
+    }
+
+    public void viewReservationByUser(String userName){
 
     }
 

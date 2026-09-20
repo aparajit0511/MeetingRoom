@@ -25,8 +25,9 @@ public class Main {
         User user = new User("Aparajit");
 
         String reservationID = meetingRoom.searchAvailableRoom(LocalTime.of(10,0),LocalTime.of(10,30));
+        meetingRoom.bookReservation(reservationID,LocalTime.of(10,0),LocalTime.of(10,30),user);
 
-
+        meetingRoom.cancelReservation(reservationID);
 
     }
 }
