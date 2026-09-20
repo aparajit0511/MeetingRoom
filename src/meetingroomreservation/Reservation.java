@@ -36,5 +36,11 @@ public class Reservation {
         return endTime;
     }
 
+    public Room getRoom() {
+        return room;
+    }
 
+    public User getUser() {
+        return user;
+    }
 }

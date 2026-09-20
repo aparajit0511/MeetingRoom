@@ -51,42 +51,35 @@ public class MeetingRoom {
             }
         }
         reservationArrayList.add(newReservation);
-//        roomReservation.put(roomId,new ArrayList<>());
-//        roomReservation.get(roomId).add(newReservation);
-//
-//        userReservation.put(userId,new ArrayList<>());
-//        userReservation.get(userId).add(newReservation);
 
-        roomReservation.put(room.getRoomName(),new ArrayList<>());
-      roomReservation.get(room.getRoomName()).add(newReservation);
+        assert room != null;
+        roomReservation.computeIfAbsent(room.getRoomName(), k-> new ArrayList<>()).add(newReservation);
+        userReservation.computeIfAbsent(user.getUserName(),k-> new ArrayList<>()).add(newReservation);
 
-      userReservation.put(user.getUserName(),new ArrayList<>());
-        userReservation.get(user.getUserName()).add(newReservation);
 
     }
 
     public void cancelReservation(String reservationId){
-        Room room = null;
-        User user = null;
-        for (int i =0 ;i< reservationArrayList.size();i++){
-            if(Objects.equals(reservationArrayList.get(i).getReservationId(), reservationId)){
-                room = reservationArrayList.get(i).room;
-                user = reservationArrayList.get(i).user;
-//                roomId = reservationArrayList.get(i).room.getRoomId();
-//                newReservation = new Reservation(room, user, startTime,endTime);
-                reservationArrayList.get(i).user = null;
 
+        Reservation reservationToRemove = null;
+        for (Reservation reservation: reservationArrayList){
+            if(reservation.getReservationId().equals(reservationId)){
+                reservationToRemove = reservation;
+                break;
             }
         }
-//        roomReservation.remove(room.getRoomId());
-//        userReservation.remove(user.getUserId());
 
-        if(user != null && room != null){
-            roomReservation.remove(room.getRoomName());
-            userReservation.remove(user.getUserName());
-
+        if(reservationToRemove == null){
+            return;
         }
 
+        reservationArrayList.remove(reservationToRemove); // this takes O(n) time
+
+        String roomName = reservationToRemove.getRoom().getRoomName();
+        roomReservation.get(roomName).remove(reservationToRemove);
+
+        String userName = reservationToRemove.getUser().getUserName();
+        userReservation.get(userName).remove(reservationToRemove);
     }
 
     public void viewReservationByRoom(String roomName) {
