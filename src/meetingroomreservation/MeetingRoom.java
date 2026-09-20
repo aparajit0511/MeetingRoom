@@ -5,17 +5,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MeetingRoom {
-    public ArrayList<Reservation> reservationList = new ArrayList<>();
-    private HashMap<String,Reservation> reservationHashMap = new HashMap<>();
-    private Integer totalRooms;
+//    public ArrayList<Reservation> reservationList = new ArrayList<>();
+    public HashMap<String,ArrayList<Reservation>> userReservation = new HashMap<>();
+    public HashMap<String,ArrayList<Reservation>> roomReservation = new HashMap<>();
+//    private HashMap<String,Reservation> reservationHashMap = new HashMap<>();
 
-    public Reservation reservation;
 
-    public MeetingRoom(int totalRooms){
-        this.totalRooms = totalRooms;
-        for (int i =1;i<= totalRooms; i++){
-            reservationList.add(reservation);
-        }
+    public MeetingRoom(Reservation reservation){
+        roomReservation.put(reservation.room.getRoomId(),new ArrayList<>());
+        roomReservation.get(reservation.room.getRoomId()).add(reservation);
+
 
 //        reservationHashMap.put()
     }
