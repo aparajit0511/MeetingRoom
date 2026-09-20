@@ -17,21 +17,43 @@ public class MeetingRoom {
 
 
     public MeetingRoom(){
-//        roomReservation.put(reservation.room.getRoomId(),new ArrayList<>());
-//        roomReservation.get(reservation.room.getRoomId()).add(reservation);
-
-
-//        reservationHashMap.put()
     }
 
-    public String searchAvailableRoom(LocalTime startTime,LocalTime endTime){
+    public String searchAvailableRoom(LocalTime startTime, LocalTime endTime) {
 
-        for (int i =0 ;i< reservationArrayList.size();i++){
-            if(reservationArrayList.get(i).user == null) // no user name , room is availbale all day
-            {
-             return reservationArrayList.get(i).getReservationId();
-            }else if (reservationArrayList.get(i).user != null && startTime.isAfter(reservationArrayList.get(i).getStartTime()) && endTime.isBefore(reservationArrayList.get(i).getEndTime())){
-                return reservationArrayList.get(i).getReservationId();
+        for (Reservation availability : reservationArrayList) {
+
+            // This represents the room's normal available window
+            if (availability.getUser() == null) {
+
+                // Requested time must fit inside the room's availability window
+                if (startTime.isBefore(availability.getStartTime())
+                        || endTime.isAfter(availability.getEndTime())) {
+                    continue;
+                }
+
+                boolean roomOccupied = false;
+
+                // Check whether this particular room has a conflicting booking
+                for (Reservation booking : reservationArrayList) {
+
+                    if (booking.getUser() != null
+                            && booking.getRoom().getRoomId()
+                            .equals(availability.getRoom().getRoomId())) {
+
+                        if (startTime.isBefore(booking.getEndTime())
+                                && endTime.isAfter(booking.getStartTime())) {
+
+                            roomOccupied = true;
+                            break;
+                        }
+                    }
+                }
+
+                // No conflicting booking → this room is available
+                if (!roomOccupied) {
+                    return availability.getReservationId();
+                }
             }
         }
 
