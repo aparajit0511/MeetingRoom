@@ -5,15 +5,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MeetingRoom {
-//    public ArrayList<Reservation> reservationList = new ArrayList<>();
-    public HashMap<String,ArrayList<Reservation>> userReservation = new HashMap<>();
-    public HashMap<String,ArrayList<Reservation>> roomReservation = new HashMap<>();
-//    private HashMap<String,Reservation> reservationHashMap = new HashMap<>();
+
+    private ArrayList<Room> roomList = new ArrayList<>();
+    private HashMap<String,ArrayList<Reservation>> userReservation = new HashMap<>();
+    private  HashMap<String,ArrayList<Reservation>> roomReservation = new HashMap<>();
+
+    private ArrayList<Reservation> reservationArrayList = new ArrayList<>();
 
 
-    public MeetingRoom(Reservation reservation){
-        roomReservation.put(reservation.room.getRoomId(),new ArrayList<>());
-        roomReservation.get(reservation.room.getRoomId()).add(reservation);
+
+    public MeetingRoom(){
+//        roomReservation.put(reservation.room.getRoomId(),new ArrayList<>());
+//        roomReservation.get(reservation.room.getRoomId()).add(reservation);
 
 
 //        reservationHashMap.put()
@@ -21,9 +24,14 @@ public class MeetingRoom {
 
     public String searchAvailableRoom(LocalTime startTime,LocalTime endTime){
 
-//        for(int i=0;i<totalRooms;i++){
-//            if (startTime >= reservationList.get(i).getStartTime() && )
-//        }
+        for (int i =0 ;i< reservationArrayList.size();i++){
+            if(reservationArrayList.get(i).user == null) // no user name , room is availbale all day
+            {
+             return reservationArrayList.get(i).getReservationId();
+            }else if (reservationArrayList.get(i).user != null && startTime.isAfter(reservationArrayList.get(i).getStartTime()) && endTime.isBefore(reservationArrayList.get(i).getEndTime())){
+                return reservationArrayList.get(i).getReservationId();
+            }
+        }
 
         return null;
     }
@@ -39,5 +47,17 @@ public class MeetingRoom {
 
     public void viewReservation(String userId){
 
+    }
+
+    public ArrayList getRoomList(){
+        return roomList;
+    }
+
+    public void addRoom(Room room){
+        roomList.add(room);
+    }
+
+    public void addReservationList(Reservation reservation){
+        reservationArrayList.add(reservation);
     }
 }

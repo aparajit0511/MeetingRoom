@@ -9,18 +9,24 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
 
+        MeetingRoom meetingRoom = new MeetingRoom();
 
         Room room = new Room("Ganga",10);
+        meetingRoom.addRoom(room);
         Room room1 = new Room("Newton",5);
+        meetingRoom.addRoom(room1);
 
-        System.out.println("Give me all rooms->" + room.getRoomList());
+        Reservation reservation = new Reservation(room,null, LocalTime.of(9,0),LocalTime.of(18,30));
+        Reservation reservation1 = new Reservation(room1,null, LocalTime.of(9,0),LocalTime.of(18,30));
+
+        meetingRoom.addReservationList(reservation);
+        meetingRoom.addReservationList(reservation1);
 
         User user = new User("Aparajit");
 
-        Reservation reservation = new Reservation(room,user, LocalTime.of(10,0),LocalTime.of(10,30));
-        Reservation reservation1 = new Reservation(room1,null, LocalTime.of(12,0),LocalTime.of(12,30));
+        String reservationID = meetingRoom.searchAvailableRoom(LocalTime.of(10,0),LocalTime.of(10,30));
 
-        MeetingRoom meetingRoom = new MeetingRoom(reservation);
+
 
     }
 }

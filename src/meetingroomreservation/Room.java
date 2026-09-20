@@ -8,13 +8,11 @@ public class Room {
     private String roomName;
     private int capacity;
 
-    private ArrayList<String> roomList = new ArrayList<String>();
 
     public Room(String roomName, Integer capacity) {
         this.roomId = UUID.randomUUID().toString();;
         this.roomName = roomName;
         this.capacity = capacity;
-        roomList.add(this.roomName);
     }
 
     public String getRoomId() {
@@ -37,7 +35,4 @@ public class Room {
         this.capacity = capacity;
     }
 
-    public ArrayList getRoomList(){
-        return roomList;
-    }
 }
