@@ -17,46 +17,88 @@ public class MeetingRoom {
 
 
     public MeetingRoom(){
-//        roomReservation.put(reservation.room.getRoomId(),new ArrayList<>());
-//        roomReservation.get(reservation.room.getRoomId()).add(reservation);
-
-
-//        reservationHashMap.put()
     }
 
-    public String searchAvailableRoom(LocalTime startTime,LocalTime endTime){
+    public String searchAvailableRoom(LocalTime startTime, LocalTime endTime) {
 
-        for (int i =0 ;i< reservationArrayList.size();i++){
-            if(reservationArrayList.get(i).user == null) // no user name , room is availbale all day
-            {
-             return reservationArrayList.get(i).getReservationId();
-            }else if (reservationArrayList.get(i).user != null && startTime.isAfter(reservationArrayList.get(i).getStartTime()) && endTime.isBefore(reservationArrayList.get(i).getEndTime())){
-                return reservationArrayList.get(i).getReservationId();
+        for (Reservation availability : reservationArrayList) {
+
+            // This represents the room's normal available window
+            if (availability.getUser() == null) {
+
+                // Requested time must fit inside the room's availability window
+                if (startTime.isBefore(availability.getStartTime())
+                        || endTime.isAfter(availability.getEndTime())) {
+                    continue;
+                }
+
+                boolean roomOccupied = false;
+
+                // Check whether this particular room has a conflicting booking
+                for (Reservation booking : reservationArrayList) {
+
+                    if (booking.getUser() != null
+                            && booking.getRoom().getRoomId()
+                            .equals(availability.getRoom().getRoomId())) {
+
+                        if (startTime.isBefore(booking.getEndTime())
+                                && endTime.isAfter(booking.getStartTime())) {
+
+                            roomOccupied = true;
+                            break;
+                        }
+                    }
+                }
+
+                // No conflicting booking → this room is available
+                if (!roomOccupied) {
+                    return availability.getReservationId();
+                }
             }
         }
 
         return null;
     }
 
-    public void bookReservation(String reservationId,LocalTime startTime,LocalTime endTime,User user){
+    public String bookReservation(String reservationId, LocalTime startTime, LocalTime endTime, User user) {
+
         Reservation newReservation = null;
         Room room = null;
-        String roomId= "";
-        String userId = user.getUserId();
-        for (int i =0 ;i< reservationArrayList.size();i++){
-            if(Objects.equals(reservationArrayList.get(i).getReservationId(), reservationId)){
-                 room = reservationArrayList.get(i).room;
-                 roomId = reservationArrayList.get(i).room.getRoomId();
-                newReservation = new Reservation(room, user, startTime,endTime);
+
+        for (int i = 0; i < reservationArrayList.size(); i++) {
+
+            if (Objects.equals(
+                    reservationArrayList.get(i).getReservationId(),
+                    reservationId)) {
+
+                room = reservationArrayList.get(i).getRoom();
+
+                newReservation =
+                        new Reservation(room, user, startTime, endTime);
+
+                break;
             }
         }
+
+        if (room == null || newReservation == null) {
+            return null;
+        }
+
         reservationArrayList.add(newReservation);
 
-        assert room != null;
-        roomReservation.computeIfAbsent(room.getRoomName(), k-> new ArrayList<>()).add(newReservation);
-        userReservation.computeIfAbsent(user.getUserName(),k-> new ArrayList<>()).add(newReservation);
+        roomReservation
+                .computeIfAbsent(
+                        room.getRoomName(),
+                        k -> new ArrayList<>())
+                .add(newReservation);
 
+        userReservation
+                .computeIfAbsent(
+                        user.getUserName(),
+                        k -> new ArrayList<>())
+                .add(newReservation);
 
+        return newReservation.getReservationId();
     }
 
     public void cancelReservation(String reservationId){
