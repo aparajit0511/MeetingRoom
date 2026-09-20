@@ -6,7 +6,7 @@ public class User {
     private String userId;
     private String userName;
 
-    public User(String userId, String userName) {
+    public User( String userName) {
         this.userId = UUID.randomUUID().toString();;
         this.userName = userName;
     }

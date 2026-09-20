@@ -16,6 +16,8 @@ public class MeetingRoom {
         for (int i =1;i<= totalRooms; i++){
             reservationList.add(reservation);
         }
+
+//        reservationHashMap.put()
     }
 
     public String searchAvailableRoom(LocalTime startTime,LocalTime endTime){

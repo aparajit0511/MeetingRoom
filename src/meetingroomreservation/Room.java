@@ -5,9 +5,9 @@ import java.util.UUID;
 public class Room {
     private String roomId;
     private String roomName;
-    private Integer capacity;
+    private int capacity;
 
-    public Room(String roomId, String roomName, Integer capacity) {
+    public Room(String roomName, Integer capacity) {
         this.roomId = UUID.randomUUID().toString();;
         this.roomName = roomName;
         this.capacity = capacity;
